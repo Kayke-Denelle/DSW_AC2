@@ -18,7 +18,6 @@ mongoose.connect('mongodb+srv://Volans:volans@cluster0.nynbs.mongodb.net/?retryW
 app.use('/cliente', cliente);
 app.use('/exame', exame);
 
-
 const PORT = 3000; 
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);

@@ -3,26 +3,28 @@ const Cliente = require('../models/cliente');
 const Exame = require('../models/exame');
 const router = express.Router();
 
-router.get('/exame', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const exame = await Exame.find().populate('idExame');
+        const exame = await Exame.find().populate('fk_idCliente');
         res.json(exame);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
 
-router.get('/exame:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
-        const exame = await Exame.findById(req.params.id).populate('idExame');
+        const exame = await Exame.findById(req.params.id).populate('fk_idCliente');
         if (!exame) return res.status(404).json({ message: 'Exame não encontrado' });
-        res.json(exame);
+
+        const cliente = await Cliente.find({ fk_idCliente: exame._id})
+        res.json(exame, cliente);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
 
-router.post('/exame', async (req, res) => {
+router.post('/', async (req, res) => {
     const exame = new Exame(req.body);
     try {
         const novoExame = await exame.save();
@@ -32,7 +34,7 @@ router.post('/exame', async (req, res) => {
     }
 });
 
-router.patch('/exame:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
     try {
         const exame = await Exame.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!exame) return res.status(404).json({ message: 'Exame não encontrado' });
@@ -42,7 +44,7 @@ router.patch('/exame:id', async (req, res) => {
     }
 });
 
-router.delete('/exame:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const exame = await Exame.findByIdAndDelete(req.params.id);
         if (!exame) return res.status(404).json({ message: 'Exame não encontrado' });
