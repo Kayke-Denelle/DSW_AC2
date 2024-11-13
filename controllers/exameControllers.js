@@ -1,6 +1,6 @@
 const express = require('express');
-const Cliente = require('../models/cliente');
 const Exame = require('../models/exame');
+
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -17,8 +17,7 @@ router.get('/:id', async (req, res) => {
         const exame = await Exame.findById(req.params.id).populate('fk_idCliente');
         if (!exame) return res.status(404).json({ message: 'Exame não encontrado' });
 
-        const cliente = await Cliente.find({ fk_idCliente: exame._id})
-        res.json(exame, cliente);
+        res.json(exame);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
