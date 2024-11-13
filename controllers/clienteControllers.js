@@ -1,10 +1,11 @@
 const express = require('express');
 const Cliente = require('../models/cliente');
+const Exame = require('../models/exame');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
-        const cliente = await Cliente.find()
+        const cliente = await Exame.find().populate('fk_idCliente');
         res.json(cliente);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const cliente = await Cliente.findById(req.params.id)
+        const cliente = await Exame.findById(req.params.id).populate('fk_idCliente');
         if (!cliente) return res.status(404).json({ message: 'Aluno não encontrado' });
         res.json(cliente);
     } catch (error) {
